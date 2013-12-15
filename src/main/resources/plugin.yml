@@ -1,0 +1,6 @@
+name: 'Areku-Security'
+main: fr.areku.minecraft.sec.SecurityPlugin
+author: ThisIsAreku
+website: http://areku.fr/
+version: 1.0
+description: Various security fix
