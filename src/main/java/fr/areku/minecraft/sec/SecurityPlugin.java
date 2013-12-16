@@ -52,6 +52,11 @@ public class SecurityPlugin extends JavaPlugin {
         //this.getCommand("ointernal").setExecutor(new Commandr(this));
         // log.log(Level.INFO, "[OrvaleInternal] enabled v{0}",
         // this.getDescription().getVersion());
+        if (getServer().getPluginManager().getPlugin("plugins-common") == null) {
+            log(Level.SEVERE, "Ce plugin requiert plugins-common");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
         try {
             loadConfig();
 
@@ -77,7 +82,7 @@ public class SecurityPlugin extends JavaPlugin {
                                 permissionInterval);
             }
             /*
-			 * Whitelist
+             * Whitelist
 			 */
             this.whitelistFilter = new WhiteList(this);
 			
