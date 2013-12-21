@@ -4,3 +4,8 @@ author: ThisIsAreku
 website: http://areku.fr/
 version: 1.0
 description: Various security fix
+softdepend: [PermissionsEx]
+commands:
+  l:
+    description: Login yourself
+    aliases: login

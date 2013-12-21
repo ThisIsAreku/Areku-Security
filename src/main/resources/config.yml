@@ -15,3 +15,6 @@ borders:
 whitelist:
   enabled: true
   command: SELECT * FROM `minecraft`.`whitelist` AS players WHERE players.allowed = 1 AND players.mc_player = ?;
+password:
+  enabled: true
+  command: SELECT * FROM `minecraft`.`whitelist` AS players WHERE players.allowed = 1 AND players.mc_player = ? AND players.password = MD5(?);

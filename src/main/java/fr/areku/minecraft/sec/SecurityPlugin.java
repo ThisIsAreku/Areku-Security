@@ -37,6 +37,9 @@ public class SecurityPlugin extends JavaPlugin {
     public WhiteList whitelistFilter;
     public String whiteListCommand = "";
 
+    public Password passwordChecker;
+    public String passwordCommand = "";
+
     @Override
     public void onDisable() {
         try {
@@ -73,8 +76,8 @@ public class SecurityPlugin extends JavaPlugin {
             /*
              * Permissions
 			 */
-            this.permissionReload = new PermissionReload(this);
             if (this.permissionInterval > 0) {
+                this.permissionReload = new PermissionReload(this);
                 this.permissionReloadScheduleId = this.getServer()
                         .getScheduler()
                         .scheduleSyncRepeatingTask(this,
@@ -85,6 +88,11 @@ public class SecurityPlugin extends JavaPlugin {
              * Whitelist
 			 */
             this.whitelistFilter = new WhiteList(this);
+            /*
+             * Password
+			 */
+            this.passwordChecker = new Password(this);
+            this.getCommand("l").setExecutor(this.passwordChecker);
 			
 			/*
 			 * Security
@@ -154,6 +162,7 @@ public class SecurityPlugin extends JavaPlugin {
         this.permissionInterval = this.getConfig().getInt("permissions.interval");
 
         this.whiteListCommand = this.getConfig().getString("whitelist.command");
+        this.passwordCommand = this.getConfig().getString("password.command");
 
         this.mysql_url = this.getConfig().getString("mysql.url");
         this.mysql_user = this.getConfig().getString("mysql.user");
