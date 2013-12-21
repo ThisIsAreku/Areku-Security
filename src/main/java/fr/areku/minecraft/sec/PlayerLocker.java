@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -50,7 +51,7 @@ public class PlayerLocker implements Listener {
                 if (event instanceof Cancellable)
                     ((Cancellable) event).setCancelled(true);
             }
-            p.sendMessage("Utilisez la commande /l <mot de passe> pour vous connecter");
+            p.sendMessage(ChatColor.YELLOW + "Utilisez la commande /l <mot de passe> pour vous connecter");
         }
     }
 
@@ -84,6 +85,8 @@ public class PlayerLocker implements Listener {
         restrictEvent(event);
     }
 
+
+    // just cancel theses events
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTarget(EntityTargetLivingEntityEvent event) {
         if (event.getTarget() instanceof Player)

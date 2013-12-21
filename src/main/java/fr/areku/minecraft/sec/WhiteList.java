@@ -79,7 +79,6 @@ public class WhiteList implements Listener {
                 PreparedStatement preparedQuery = this.plugin.mySQLClient.prepareStatement(this.plugin.whiteListCommand);
                 preparedQuery.setString(1, event.getName());
                 ResultSet query = preparedQuery.executeQuery();
-                System.out.println(preparedQuery.toString());
                 int i = 0;
                 while (query.next()) {
                     i++;

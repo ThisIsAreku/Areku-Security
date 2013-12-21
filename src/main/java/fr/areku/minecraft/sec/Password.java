@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,7 @@ public class Password implements Listener, CommandExecutor {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        System.out.println(event.getPlayer().getLocation());
+        event.getPlayer().sendMessage(ChatColor.YELLOW + "Connectez-vous avec la commande /l <mot de passe>");
         Volatile.set("lock." + event.getPlayer().getName(), event.getPlayer().getLocation().clone());
     }
 
@@ -77,14 +78,12 @@ public class Password implements Listener, CommandExecutor {
         }
         boolean rslt = false;
         String msg = "";
-        System.out.println(s);
         if (this.plugin.mySQLClient.checkConnectionIsAlive(true)) {
             try {
                 PreparedStatement preparedQuery = this.plugin.mySQLClient.prepareStatement(this.plugin.passwordCommand);
                 preparedQuery.setString(1, commandSender.getName());
                 preparedQuery.setString(2, join(strings));
                 ResultSet query = preparedQuery.executeQuery();
-                System.out.println(preparedQuery.toString());
                 int i = 0;
                 while (query.next()) {
                     i++;
@@ -106,9 +105,10 @@ public class Password implements Listener, CommandExecutor {
             msg = "Erreur de base de donnée, serveur innacessible. Reessayez plus tard !";
         }
         if (rslt) {
-            commandSender.sendMessage(msg);
+            commandSender.sendMessage(ChatColor.RED + msg);
             ((Player) commandSender).kickPlayer(msg);
         } else {
+            commandSender.sendMessage(ChatColor.GREEN + "Vous êtes maintenant connecté !");
             Volatile.delete("lock." + commandSender.getName());
         }
         return true;
