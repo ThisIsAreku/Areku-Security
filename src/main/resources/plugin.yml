@@ -5,6 +5,7 @@ website: http://areku.fr/
 version: 1.0
 description: Various security fix
 softdepend: [PermissionsEx]
+depend: [plugins-common]
 commands:
   l:
     description: Login yourself

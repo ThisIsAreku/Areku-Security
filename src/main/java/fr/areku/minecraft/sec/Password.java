@@ -1,13 +1,10 @@
 package fr.areku.minecraft.sec;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -22,7 +19,7 @@ import java.util.logging.Level;
  * Proprietary and confidential
  * Written by Alexandre, 20/12/13
  */
-public class Password implements Listener, CommandExecutor {
+public class Password implements Listener {
 
     private SecurityPlugin plugin;
     private boolean enabled;
@@ -70,47 +67,46 @@ public class Password implements Listener, CommandExecutor {
         return sb.toString();
     }
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage("Cette commande doit être exécuté en tant que joueur");
-            return true;
-        }
-        boolean rslt = false;
-        String msg = "";
-        if (this.plugin.mySQLClient.checkConnectionIsAlive(true)) {
-            try {
-                PreparedStatement preparedQuery = this.plugin.mySQLClient.prepareStatement(this.plugin.passwordCommand);
-                preparedQuery.setString(1, commandSender.getName());
-                preparedQuery.setString(2, join(strings));
-                ResultSet query = preparedQuery.executeQuery();
-                int i = 0;
-                while (query.next()) {
-                    i++;
-                }
-                if (i == 0) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String[] cmd = event.getMessage().split(" ", 2);
+        if (cmd[0].equalsIgnoreCase("/l") || cmd[0].equalsIgnoreCase("/login")) {
+            boolean rslt = false;
+            String msg = "";
+            if (this.plugin.mySQLClient.checkConnectionIsAlive(true)) {
+                try {
+                    PreparedStatement preparedQuery = this.plugin.mySQLClient.prepareStatement(this.plugin.passwordCommand);
+                    preparedQuery.setString(1, event.getPlayer().getName());
+                    preparedQuery.setString(2, cmd[1]);
+                    ResultSet query = preparedQuery.executeQuery();
+                    int i = 0;
+                    while (query.next()) {
+                        i++;
+                    }
+                    if (i == 0) {
+                        rslt = true;
+                        msg = "Mot de passe incorrecte";
+                    } else if (i != 1) {
+                        rslt = true;
+                        msg = "Erreur de base de donnée, serveur inacessible. Reessayez plus tard !";
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                     rslt = true;
-                    msg = "Mot de passe incorrecte";
-                } else if (i != 1) {
-                    rslt = true;
-                    msg = "Erreur de base de donnée, serveur inacessible. Reessayez plus tard !";
+                    msg = "Erreur de base de donnée, serveur innacessible. Reessayez plus tard !";
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            } else {
                 rslt = true;
                 msg = "Erreur de base de donnée, serveur innacessible. Reessayez plus tard !";
             }
-        } else {
-            rslt = true;
-            msg = "Erreur de base de donnée, serveur innacessible. Reessayez plus tard !";
+            if (rslt) {
+                event.getPlayer().sendMessage(ChatColor.RED + msg);
+                event.getPlayer().kickPlayer(msg);
+            } else {
+                event.getPlayer().sendMessage(ChatColor.GREEN + "Vous êtes maintenant connecté !");
+                Volatile.delete("lock." + event.getPlayer().getName());
+            }
+            event.setCancelled(true);
         }
-        if (rslt) {
-            commandSender.sendMessage(ChatColor.RED + msg);
-            ((Player) commandSender).kickPlayer(msg);
-        } else {
-            commandSender.sendMessage(ChatColor.GREEN + "Vous êtes maintenant connecté !");
-            Volatile.delete("lock." + commandSender.getName());
-        }
-        return true;
     }
 }

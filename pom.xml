@@ -60,7 +60,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.2</version>
@@ -73,15 +73,14 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>org.bukkit:*</exclude>
-                                    <!--<exclude>fr.areku.minecraft:plugin-commons:*</exclude>-->
-                                </excludes>
+                                <includes>
+                                    <include>fr.areku.minecraft:plugin-commons:*</include>
+                                </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>  -->
         </plugins>
     </build>
 

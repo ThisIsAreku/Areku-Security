@@ -92,8 +92,7 @@ public class SecurityPlugin extends JavaPlugin {
              * Password
 			 */
             this.passwordChecker = new Password(this);
-            this.getCommand("l").setExecutor(this.passwordChecker);
-			
+
 			/*
 			 * Security
 			 */
