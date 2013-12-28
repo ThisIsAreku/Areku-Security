@@ -69,6 +69,8 @@ public class Password implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if(!(event.getMessage().startsWith("/l")||event.getMessage().startsWith("/login")))
+            return;
         String[] cmd = event.getMessage().split(" ", 2);
         if (cmd[0].equalsIgnoreCase("/l") || cmd[0].equalsIgnoreCase("/login")) {
             boolean rslt = false;
