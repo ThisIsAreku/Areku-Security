@@ -1,6 +1,7 @@
 package fr.areku.minecraft.sec;
 
 import fr.areku.minecraft.commons.MySQLPool;
+import fr.areku.minecraft.sec.commands.normal;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -94,7 +95,7 @@ public class SecurityPlugin extends JavaPlugin {
             this.passwordChecker = new Password(this);
 
 			/*
-			 * Security
+             * Security
 			 */
             //this.securityFilter = new Security(this);
 			
@@ -104,6 +105,10 @@ public class SecurityPlugin extends JavaPlugin {
             //this.borderFilter = new Borders(this);
 
             getServer().getPluginManager().registerEvents(new PlayersListener(), this);
+
+
+            getCommand("normal").setExecutor(new normal());
+
         } catch (Exception e) {
             logException(e, "Areku-Security error..");
             this.setEnabled(false);
