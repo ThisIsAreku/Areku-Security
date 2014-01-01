@@ -185,6 +185,8 @@ public class SecurityPlugin extends JavaPlugin {
         log(String.format("\t interval : %s s", this.permissionInterval));
         log("Whitelist");
         log(String.format("\t command : \"%s\"", this.whiteListCommand));
+        log("Password");
+        log(String.format("\t command : \"%s\"", this.passwordCommand));
 
         this.permissionInterval *= 20;
     }
