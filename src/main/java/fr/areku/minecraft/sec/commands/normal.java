@@ -23,9 +23,10 @@ public class normal implements CommandExecutor {
         Player p = (Player) commandSender;
 
         p.setGameMode(GameMode.SURVIVAL);
+        p.getInventory().clear();
 
 
-        p.sendMessage(ChatColor.BLUE + "Vous avez été réinitialisé," + ChatColor.MAGIC +" bon jeu !");
+        p.sendMessage(ChatColor.BLUE + "Vous avez été réinitialisé, bon jeu !");
         return true;
     }
 }
