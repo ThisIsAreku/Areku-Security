@@ -72,6 +72,11 @@ public class Password implements Listener {
         if(!(event.getMessage().startsWith("/l")||event.getMessage().startsWith("/login")))
             return;
         String[] cmd = event.getMessage().split(" ", 2);
+        if(cmd.length != 2){
+            event.getPlayer().sendMessage(ChatColor.RED + "Usage: /l <mot de passe>");
+            event.setCancelled(true);
+            return;
+        }
         if (cmd[0].equalsIgnoreCase("/l") || cmd[0].equalsIgnoreCase("/login")) {
             boolean rslt = false;
             String msg = "";
@@ -107,6 +112,7 @@ public class Password implements Listener {
             } else {
                 event.getPlayer().sendMessage(ChatColor.GREEN + "Vous êtes maintenant connecté !");
                 Volatile.delete("lock." + event.getPlayer().getName());
+                this.plugin.getLogger().info(event.getPlayer().getName() + " : logged in successfully");
             }
             event.setCancelled(true);
         }
