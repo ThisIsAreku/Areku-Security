@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,69 +15,28 @@ import java.util.logging.Level;
 /**
  * @author Alexandre
  */
-public class WhiteList implements Listener {
+public class WhiteList extends BaseSecurityClass {
 
-    private SecurityPlugin plugin;
-    private boolean enabled;
-
-    public WhiteList(SecurityPlugin plugin) {
-        this.plugin = plugin;
-        this.enabled = this.plugin.getConfig().getBoolean("whitelist.enabled");
-        this.plugin.getServer().getPluginManager()
-                .registerEvents(this, this.plugin);
-        loadMysql();
+    public WhiteList() {
+        super("whitelist");
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        this.plugin.getConfig().set("whitelist.enabled", enabled);
-        try {
-            this.plugin.getConfig().save(this.plugin.cfgFile);
-        } catch (IOException e) {
-            SecurityPlugin.log(Level.WARNING, "Cannot save whitelist stated");
-        }
-        loadMysql();
-    }
-
-    private void loadMysql() {
-        try {
-            if (this.enabled) {
-                //SecurityPlugin.log("Opening MySQL connection...");
-                this.plugin.mySQLClient.connect();
-            } else {
-                this.plugin.mySQLClient.close();
-            }
-        } catch (SQLException e) {
-            SecurityPlugin.log(Level.WARNING, "Cannot enable whitelist");
-            this.enabled = false;
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (!this.enabled)
+        if (!isEnabled())
             return;
-        if (this.plugin
-                .getServer()
-                .getWhitelistedPlayers()
-                .contains(
-                        this.plugin.getServer().getOfflinePlayer(
-                                event.getName()))) {
+        loadMysql();
+        if (Bukkit.getServer().getWhitelistedPlayers().contains(Bukkit.getServer().getOfflinePlayer(event.getName()))) {
             if (SecurityPlugin.verbose) {
-                SecurityPlugin.log(String.format("Bypass check for %s", event
-                        .getName()));
+                SecurityPlugin.log(String.format("Bypass check for %s", event.getName()));
             }
             return;
         }
         AsyncPlayerPreLoginEvent.Result rslt = AsyncPlayerPreLoginEvent.Result.ALLOWED;
         String msg = "";
-        if (this.plugin.mySQLClient.checkConnectionIsAlive(true)) {
+        if (SecurityPlugin.getInstance().mySQLClient.checkConnectionIsAlive(true)) {
             try {
-                PreparedStatement preparedQuery = this.plugin.mySQLClient.prepareStatement(this.plugin.whiteListCommand);
+                PreparedStatement preparedQuery = SecurityPlugin.getInstance().mySQLClient.prepareStatement(SecurityPlugin.getInstance().whiteListCommand);
                 preparedQuery.setString(1, event.getName());
                 ResultSet query = preparedQuery.executeQuery();
                 int i = 0;

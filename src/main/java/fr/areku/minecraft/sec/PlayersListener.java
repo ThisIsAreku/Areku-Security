@@ -1,9 +1,11 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.text.SimpleDateFormat;
@@ -11,6 +13,14 @@ import java.util.Date;
 
 public class PlayersListener implements Listener {
     public PlayersListener() {
+        Bukkit.getServer().getPluginManager().registerEvents(this, SecurityPlugin.getInstance());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (Volatile.contains("server-lock")) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Le serveur est actuellement en maintenance");
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

@@ -2,6 +2,7 @@ package fr.areku.minecraft.sec;
 
 import fr.areku.minecraft.commons.MySQLPool;
 import fr.areku.minecraft.sec.commands.normal;
+import fr.areku.minecraft.sec.commands.serverLock;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,6 +41,10 @@ public class SecurityPlugin extends JavaPlugin {
 
     public Password passwordChecker;
     public String passwordCommand = "";
+
+    public static SecurityPlugin getInstance() {
+        return instance;
+    }
 
     @Override
     public void onDisable() {
@@ -88,26 +93,26 @@ public class SecurityPlugin extends JavaPlugin {
             /*
              * Whitelist
 			 */
-            this.whitelistFilter = new WhiteList(this);
+            this.whitelistFilter = new WhiteList();
             /*
              * Password
 			 */
-            this.passwordChecker = new Password(this);
+            this.passwordChecker = new Password();
 
 			/*
              * Security
 			 */
             //this.securityFilter = new Security(this);
-			
+
 			/*
 			 * Borders
 			 */
             //this.borderFilter = new Borders(this);
+            new PlayersListener();
 
-            getServer().getPluginManager().registerEvents(new PlayersListener(), this);
 
-
-            getCommand("normal").setExecutor(new normal());
+            new normal();
+            new serverLock();
 
         } catch (Exception e) {
             logException(e, "Areku-Security error..");

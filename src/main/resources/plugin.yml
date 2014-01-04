@@ -2,7 +2,7 @@ name: 'Areku-Security'
 main: fr.areku.minecraft.sec.SecurityPlugin
 author: ThisIsAreku
 website: http://areku.fr/
-version: 1.1
+version: 1.2
 description: Various security fix
 softdepend: [PermissionsEx]
 depend: [plugins-common]
@@ -12,3 +12,5 @@ commands:
     aliases: login
   normal:
     description: Reset yourself
+  server-lock:
+    description: lock the server

@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec.commands;
 
+import fr.areku.minecraft.sec.SecurityPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -13,7 +14,11 @@ import org.bukkit.entity.Player;
  * Proprietary and confidential
  * Written by Alexandre, 01/01/14
  */
-public class normal implements CommandExecutor {
+public class normal extends SecurityCommand {
+    public normal() {
+        super("normal");
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!(commandSender instanceof Player)) {

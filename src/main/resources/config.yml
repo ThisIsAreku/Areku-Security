@@ -2,16 +2,6 @@
 verbose: false
 permissions:
   interval: 120
-borders:
-  enabled: true
-  worlds:
-    - world
-  x:
-    min: -100
-    max: 100
-  z:
-    min: -100
-    max: 100
 whitelist:
   enabled: true
   command: SELECT * FROM `minecraft`.`whitelist` AS players WHERE players.allowed = 1 AND players.mc_player = ?;
