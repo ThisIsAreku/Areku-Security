@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,9 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Copyright (C) Areku-Security - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -20,15 +18,9 @@ import java.util.Map;
  * Written by Alexandre, 20/12/13
  */
 public class PlayerLocker implements Listener {
-    private Map<String, Long> lastMoveTime;
 
     public PlayerLocker() {
-        lastMoveTime = new HashMap<>();
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerMove(PlayerMoveEvent event) {
-        restrictEvent(event);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SecurityPlugin.getInstance());
     }
 
     private void restrictEvent(Event event) {
@@ -51,8 +43,21 @@ public class PlayerLocker implements Listener {
                 if (event instanceof Cancellable)
                     ((Cancellable) event).setCancelled(true);
             }
-            p.sendMessage(ChatColor.YELLOW + "Utilisez la commande /l <mot de passe> pour vous connecter");
+            if (!Volatile.contains("lastmsgtime." + pname)) {
+            } else if (System.currentTimeMillis() - (long) Volatile.get("lastmsgtime." + pname) > 5000) {
+                sendTimedMessage(p, ChatColor.YELLOW + "Utilisez la commande /l <mot de passe> pour vous connecter");
+            }
         }
+    }
+
+    private void sendTimedMessage(Player p, String message) {
+        Volatile.set("lastmsgtime." + p.getName(), System.currentTimeMillis());
+        p.sendMessage(message);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        restrictEvent(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
