@@ -57,6 +57,8 @@ public class Password extends BaseSecurityClass {
             event.setCancelled(true);
             return;
         }
+
+        event.getPlayer().sendMessage(ChatColor.BLUE + "Vérification en cours...");
         loadMysql();
         boolean rslt = false;
         String msg = "";
