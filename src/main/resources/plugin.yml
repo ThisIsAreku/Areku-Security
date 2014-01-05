@@ -1,8 +1,8 @@
-name: 'Areku-Security'
+name: ${name}
 main: fr.areku.minecraft.sec.SecurityPlugin
 author: ThisIsAreku
 website: http://areku.fr/
-version: 1.2
+version: ${version}
 description: Various security fix
 softdepend: [PermissionsEx]
 depend: [plugins-common]

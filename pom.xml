@@ -6,7 +6,7 @@
 
     <groupId>fr.areku.minecraft</groupId>
     <artifactId>Areku-Security</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <name>Areku-Security</name>
     <description>Some security for my server</description>
@@ -49,6 +49,12 @@
 
     <build>
         <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
