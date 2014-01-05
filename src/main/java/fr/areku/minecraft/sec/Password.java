@@ -21,16 +21,21 @@ public class Password extends BaseSecurityClass {
 
     public Password() {
         super("password");
+        registerEvents(this);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if (!isEnabled())
+            return;
         event.getPlayer().sendMessage(ChatColor.YELLOW + "Connectez-vous avec la commande /l <mot de passe>");
         Volatile.set("lock." + event.getPlayer().getName(), event.getPlayer().getLocation().clone());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
+        if (!isEnabled())
+            return;
         Volatile.delete("lock." + event.getPlayer().getName());
     }
 

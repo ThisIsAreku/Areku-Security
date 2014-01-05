@@ -21,9 +21,12 @@ public class BaseSecurityClass implements Listener {
     public BaseSecurityClass(String name) {
         this.name = name;
         this.enabled = SecurityPlugin.getInstance().getConfig().getBoolean(name + ".enabled");
-        Bukkit.getServer().getPluginManager().registerEvents(this, SecurityPlugin.getInstance());
 
         loadMysql();
+    }
+
+    protected void registerEvents(Listener l) {
+        Bukkit.getServer().getPluginManager().registerEvents(l, SecurityPlugin.getInstance());
     }
 
     public boolean isEnabled() {

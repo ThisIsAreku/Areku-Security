@@ -19,6 +19,7 @@ public class WhiteList extends BaseSecurityClass {
 
     public WhiteList() {
         super("whitelist");
+        registerEvents(this);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
