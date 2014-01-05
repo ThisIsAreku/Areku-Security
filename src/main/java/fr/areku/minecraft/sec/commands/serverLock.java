@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Copyright (C) Areku-Security - All Rights Reserved
@@ -20,19 +19,15 @@ public class serverLock extends SecurityCommand {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage(ChatColor.RED + "Impossible d'utiliser cette commande en tant que Console");
-            return true;
-        }
         if (!(commandSender.isOp())) {
             return false;
         }
 
         if (strings.length == 0 || (strings.length > 0 && strings[0].equalsIgnoreCase("on"))) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Server is "+ChatColor.BOLD+"locked");
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Server is " + ChatColor.BOLD + "locked");
             Volatile.set("server-lock", true);
         } else if (strings[0].equalsIgnoreCase("off")) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Server is "+ChatColor.BOLD+"unlocked");
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Server is " + ChatColor.BOLD + "unlocked");
             Volatile.delete("server-lock");
         }
 
