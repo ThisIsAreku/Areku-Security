@@ -58,9 +58,6 @@ public class SecurityPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        //this.getCommand("ointernal").setExecutor(new Commandr(this));
-        // log.log(Level.INFO, "[OrvaleInternal] enabled v{0}",
-        // this.getDescription().getVersion());
         if (getServer().getPluginManager().getPlugin("plugins-common") == null) {
             log(Level.SEVERE, "Ce plugin requiert plugins-common");
             getPluginLoader().disablePlugin(this);
@@ -109,6 +106,7 @@ public class SecurityPlugin extends JavaPlugin {
 			 */
             //this.borderFilter = new Borders(this);
             new PlayersListener();
+            new PlayerLocker();
 
 
             new normal();
