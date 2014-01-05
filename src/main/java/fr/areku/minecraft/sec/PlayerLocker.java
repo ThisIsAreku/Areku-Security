@@ -44,6 +44,8 @@ public class PlayerLocker implements Listener {
                     ((Cancellable) event).setCancelled(true);
             }
             if (!Volatile.contains("lastmsgtime." + pname)) {
+                sendTimedMessage(p, ChatColor.YELLOW + "Utilisez la commande /l <mot de passe> pour vous connecter");
+
             } else if (System.currentTimeMillis() - (long) Volatile.get("lastmsgtime." + pname) > 5000) {
                 sendTimedMessage(p, ChatColor.YELLOW + "Utilisez la commande /l <mot de passe> pour vous connecter");
             }
