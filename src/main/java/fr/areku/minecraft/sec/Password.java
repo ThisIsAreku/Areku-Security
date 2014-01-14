@@ -1,5 +1,6 @@
 package fr.areku.minecraft.sec;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,6 +29,7 @@ public class Password extends BaseSecurityClass {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (!isEnabled())
             return;
+        event.setJoinMessage(ChatColor.YELLOW + "[" + ChatColor.DARK_GREEN + "x" + ChatColor.YELLOW + "] " + event.getPlayer().getName());
         event.getPlayer().sendMessage(ChatColor.YELLOW + "Connectez-vous avec la commande /l <mot de passe>");
         Volatile.set("lock." + event.getPlayer().getName(), event.getPlayer().getLocation().clone());
     }
@@ -36,6 +38,7 @@ public class Password extends BaseSecurityClass {
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (!isEnabled())
             return;
+        event.setQuitMessage(ChatColor.YELLOW + "[" + ChatColor.RED + "-" + ChatColor.YELLOW + "] " + event.getPlayer().getName());
         Volatile.delete("lock." + event.getPlayer().getName());
     }
 
@@ -98,6 +101,7 @@ public class Password extends BaseSecurityClass {
             event.getPlayer().kickPlayer(msg);
         } else {
             event.getPlayer().sendMessage(ChatColor.GREEN + "Vous êtes maintenant connecté !");
+            Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + "[" + ChatColor.GREEN + "+" + ChatColor.YELLOW + "] " + event.getPlayer().getName());
             Volatile.delete("lock." + event.getPlayer().getName());
             SecurityPlugin.getInstance().getLogger().info(event.getPlayer().getName() + " : logged in successfully");
         }
